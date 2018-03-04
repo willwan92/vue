@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Examples</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app-1">
+		<!-- v-once 一次性插值 -->
+		<p v-once>这个将不会改变：{{msg}}</p>
+		
+		<!-- 插入html标签 -->
+		<p>Using mustaches: {{ rawHtml }}</p>
+		<p>Using v-html directive: <span v-html="rawHtml"></span></p>
+
+		<!-- 插入标签属性 -->
+		<button v-bind:disabled="isDisabled">Button</button>
+
+		<!-- 使用 JavaScript 表达式 -->
+		<p>现在是：{{ new Date().getTime() * Math.random() }}</p>
+
+	</div>
+
+	
+</body>
+<script type="text/javascript">
+	var app1 = new Vue({
+		el: '#app-1',
+		data: {
+			msg: '不变',
+			rawHtml: '<span style="color: red">This should be red.</span>',
+			isDisabled: true
+		},
+	})
+</script>
+</html>
