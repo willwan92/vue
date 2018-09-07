@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue router</title>
+	<script src="./assets/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./assets/vue-router.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>Hello App!</h1>
+		<p>
+			<router-link to="/user/foo/">/user/foo</router-link>
+			<router-link to="/user/foo/profile">/user/foo/profile</router-link>
+			<router-link to="/user/foo/posts">/user/foo/posts</router-link>
+
+			<router-link to="/user/bar/">/user/bar</router-link>
+			<router-link to="/user/bar/profile">/user/bar/profile</router-link>
+			<router-link to="/user/bar/posts">/user/bar/posts</router-link>
+		</p>
+		<router-view></router-view>
+	</div>
+
+	<script>
+		const User = {
+			template: '\
+				<div class="user">\
+					<h2>User {{ $route.params.id }}</h2>\
+					<router-view></router-view>\
+				</div>\
+			'
+		}
+
+		const Home = { template: '<div> Home</div>' }
+		const Profile = { template: '<div> Profile</div>' }
+		const Posts = { template: '<div> Posts</div>' }
+
+
+
+		
+		const router = new VueRouter({
+			routes: [
+				{ 
+					path: '/user/:id', component: User,
+					children: [
+						{
+							path: '/', component: Home
+						},
+						{
+							path: 'profile', component: Profile
+						},
+						{
+							path: 'posts', component: Posts
+						}
+					]	
+				}
+			]
+		})
+
+		const app = new Vue({
+			router
+		}).$mount('#app')
+	</script>
+</body>
+</html>

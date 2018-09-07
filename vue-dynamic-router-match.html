@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue router</title>
+	<script src="./assets/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./assets/vue-router.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>Hello App!</h1>
+		<p>
+			<router-link to="/user/foo">/user/foo</router-link>
+			<router-link to="/user/bar">/user/bar</router-link>
+		</p>
+		<router-view></router-view>
+	</div>
+
+	<script>
+		const User = {
+			template: '<div>User {{ $route.params.id }}</div>',
+			watch: {
+				'$route' (to, from ) {
+					// 对路由变化作出响应
+				}
+			}
+		}
+
+		
+		const router = new VueRouter({
+			routes: [
+				{ path: '/user/:id', component: User}
+			]
+		})
+
+		const app = new Vue({
+			router
+		}).$mount('#app')
+	</script>
+</body>
+</html>
