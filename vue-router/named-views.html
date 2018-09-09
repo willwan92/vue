@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue router</title>
+	<script src="../assets/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../assets/vue-router.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>命名视图</h1>
+		<p>适用于同一路由页面显示度几个视图，而不嵌套显示。例如创建一个页面的布局：侧导航+主内容</p>
+		<ul>
+			<li>
+				<router-link to="/">/</router-link>
+			</li>
+			<li>
+				<router-link to="/other">/other</router-link>
+			</li>
+		</ul>
+		
+		<router-view></router-view>
+		<router-view name="one"></router-view>
+		<router-view name="two"></router-view>
+	</div>
+
+	<script>
+
+		const Foo = { template: '<div> Foo</div>' }
+		const Bar = { template: '<div> Bar</div>' }
+		const Baz = { template: '<div> Baz</div>' }
+		
+		const router = new VueRouter({
+			routes: [
+				{ 
+					path: '/', 
+					components: {
+						default: Foo,
+						one: Bar,
+						two: Baz
+					}
+				},
+				{ 
+					path: '/other', 
+					components: {
+						default: Bar,
+						one: Foo,
+						two: Baz
+					}
+				},
+			]
+		})
+
+		const app = new Vue({
+			router,
+			el: '#app'	
+		})
+	</script>
+</body>
+</html>

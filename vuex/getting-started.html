@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue router</title>
+	<script src="../assets/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../assets/vuex.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>vuex 起步</h1>
+		<p>{{ count }}</p>
+		<p>
+			<input type="button" @click="increment" value="+">
+			<input type="button" @click="decrement" value="-">
+		</p>
+	</div>
+
+	<script>
+
+		var store = new Vuex.Store({
+			state: {
+				count: 0,
+			},
+			mutations: {
+				increment: function(state) {
+					state.count++;
+				},
+				decrement: function(state) {
+					state.count--;
+				},
+
+			}
+		})
+
+		var app = new Vue({
+			el: "#app",
+			computed: {
+				count: function() {
+					return store.state.count;
+				}
+			},
+			methods: {
+				// 只有通过store提交mutation（变化）才能修改store中的状态
+				increment: function () {
+					store.commit('increment')
+				},
+				decrement: function () {
+					store.commit('decrement')
+				}
+			}
+		})
+		
+	</script>
+</body>
+</html>
