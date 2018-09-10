@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vuex</title>
+	<script src="../assets/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../assets/vuex.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>vuex state</h1>
+		<!-- 注意组件要写成成对闭合的标签，否则后面html标签渲染不出来 -->
+		<Counter></Counter>
+		<div>
+			<input type="button" @click="increment" value="+">
+			<input type="button" @click="decrement" value="-">
+		</div>
+	</div>
+
+	<script>
+		var store = new Vuex.Store({
+			state: {
+				count: 0,
+			},
+			mutations: {
+				increment: function(state, playload) {
+					state.count += playload.amount;
+				},
+				decrement: function(state) {
+					state.count--;
+				},
+
+			},
+			actions: {
+				incrementAsync({ commit }, { amount }) {
+					setTimeout(function () {
+						commit({
+							type: 'increment',
+							amount: amount
+						});
+					}, 1000)
+				}
+			}
+		})		
+
+		const Counter = {
+			template: '<div>{{ count }}</div>',
+			computed: {
+				count () {
+					return this.$store.state.count;
+				}
+			}
+		}
+
+		var app = new Vue({
+			el: "#app",
+			// 通过在根实例中注册 store 选项，该 store 实例会注入到根组件下的所有子组件中，子组件能通过 this.$store 访问到。
+			store,
+			components: { Counter },
+			methods: {
+				// 只有通过store提交mutation（变化）才能修改store中的状态
+				increment: function () {
+					store.dispatch({
+						type: 'incrementAsync',
+						amount: 8
+					})
+				},
+				decrement: function () {
+					store.commit('decrement')
+				}
+			}
+		})
+		
+	</script>
+</body>
+</html>
