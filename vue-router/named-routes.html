@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue router</title>
+	<script src="../assets/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../assets/vue-router.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>hello named routes.</h1>
+		<p>给路由添加name属性，链接路由的时候比直接写路径更加方便</p>
+		<p>
+			<router-link to="/user/foo">/user/foo</router-link>
+			<!-- 注意：使用命名路由的时候，由于是给to属性绑定一个对象，所以要用v-bind:to来绑定，缩写即为`:to`-->
+			<router-link :to="{name: 'user', params: {id: 'bar'}}">/user/bar</router-link>
+		</p>
+		<router-view></router-view>
+	</div>
+
+	<script>
+		const User = {
+			template: '\
+				<div class="user">\
+					<h2>User {{ $route.params.id }}</h2>\
+				</div>\
+			'
+		}
+		
+		const router = new VueRouter({
+			routes: [
+				{ 
+					path: '/user/:id', 
+					component: User,
+					name: 'user'
+				}
+			]
+		})
+
+		const app = new Vue({
+			router
+		}).$mount('#app')
+
+		router.push({name: 'user', params:{id: 'foo'}})
+	</script>
+</body>
+</html>
