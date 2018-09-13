@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue router</title>
+	<script src="../assets/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../assets/vue-router.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>重定向和别名</h1>
+		<p>重定向就是把一个路由重定向到另一个路由</p>
+		<p>别名则是给一个路由另起一个路径名，注意不是路由名称name</p>
+		<ul>
+			<li>
+				<router-link to="/a">/a</router-link>
+			</li>
+			<li>
+				<router-link to="/a1">/a1</router-link>
+			</li>
+			<li>
+				<router-link to="/aa">/aa</router-link>
+			</li>
+			<li>
+				<router-link to="/b">/b</router-link>
+			</li>
+			<li>
+				<router-link to="/b1">/b1</router-link>
+			</li>
+		</ul>
+		
+		<router-view></router-view>
+	</div>
+
+	<script>
+
+		const a = {
+			template: `
+				<h1>a</h1>
+			`
+		}
+
+		const b = {
+			template: `
+				<h1>b</h1>
+			`
+		}
+
+		const router = new VueRouter({
+			routes: [
+				{ 
+					path: '/a',
+					alias: '/aa',
+					component: a
+				},
+				{ 
+					path: '/b', 
+					name: 'b',
+					component: b
+				},
+				{ 
+					path: '/a1',
+					redirect: '/a'
+				},
+				{ 
+					path: '/b1',
+					redirect: {name: "b"}
+				},
+			]
+		})
+
+		const app = new Vue({
+			router,
+			el: '#app'	
+		})
+	</script>
+</body>
+</html>

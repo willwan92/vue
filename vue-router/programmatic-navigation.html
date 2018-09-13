@@ -8,8 +8,8 @@
 </head>
 <body>
 	<div id="app">
-		<h1>嵌套路由</h1>
-		<p>路由链接的视图组件内嵌套路由视图标签作为子路由的视图出口。相应的路由下添加children属性（数组），它可以包含多个子路由。</p>
+		<h1>hello programmatic navigation.</h1>
+		<p>vue-router 提供了类似window.history的API来将页面导向不同的URL</p>
 		<p>
 			<router-link to="/user/foo/">/user/foo</router-link>
 			<router-link to="/user/foo/profile">/user/foo/profile</router-link>
@@ -61,6 +61,9 @@
 		const app = new Vue({
 			router
 		}).$mount('#app')
+
+		// 页面将加载路由/user/foo/posts对应的视图
+		router.push('/user/foo/posts')
 	</script>
 </body>
 </html>
