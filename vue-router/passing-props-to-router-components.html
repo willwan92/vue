@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue router</title>
+	<script src="../assets/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../assets/vue-router.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>给路由组件传参</h1>
+		<p>在组件中使用 $route 获取路由参数会使组件与其对应路由形成高度耦合，从而使组件只能在某些特定的 URL 上使用，限制了其灵活性。</p>
+		<p>我们可以用 props 来给组件传参，从而使路由和组件解耦。</p>
+		<p>
+			<router-link to="/user/foo">/user/foo</router-link>
+			<router-link to="/user/bar">/user/bar</router-link>
+		</p>
+		<router-view></router-view>
+		<router-view name="sidebar"></router-view>		
+	</div>
+	<script>
+		const User = {
+			props: ['id'],
+			template: '<div>User {{ id }}</div>',
+			watch: {
+				'$route' (to, from ) {
+					// 对路由变化作出响应
+				}
+			}
+		}
+
+		const Sidebar = {
+			props: ['id'],
+			template: `<div>
+			sidebar
+			</div>`
+		}
+
+		
+		const router = new VueRouter({
+			routes: [
+				{ 
+					path: '/user/:id',
+					components: { default: User, sidebar: Sidebar},
+					// 布尔模式
+					// props 被设置为 true，route.params 将会被设置为组件属性，在组件中就可以使用对应的属性。
+					// 对于包含命名视图的路由，必须为每个视图添加 props
+					props: { default: true, sidebar: false} 
+				}
+			]
+		})
+
+		const app = new Vue({
+			router
+		}).$mount('#app')
+	</script>
+</body>
+</html>

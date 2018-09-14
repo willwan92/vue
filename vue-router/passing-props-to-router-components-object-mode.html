@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue router</title>
+	<script src="../assets/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../assets/vue-router.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>给路由组件传参--对象模式和函数模式</h1>
+		<p>
+			<router-link to="/user">/user</router-link>
+			<router-link to="/sercher?q=vue">/sercher</router-link>
+		</p>
+		<router-view></router-view>	
+	</div>
+	<script>
+		const User = {
+			props: ['admin'],
+			template: `<div>
+				<h2>User</h2>
+				<p>admin: {{admin}}</P>
+			</div>`
+		}
+
+		const UserSeacher = {
+			props: ['query'],
+			template: `<div>
+				<h2>UserSeacher</h2>
+				<p>query: {{query}}</P>
+			</div>`
+		}
+		
+		const router = new VueRouter({
+			routes: [
+				{ 
+					path: '/user',
+					component: User,
+					// 如果 props 是一个对象，它会被按原样设置为组件属性。当 props 是静态的时候有用。
+					props: { admin: false }
+				},
+				{
+					path: '/sercher',
+					component: UserSeacher,
+					// 你还可以创建一个函数返回 props
+					props: (route) => ({query: route.query.q})
+				}
+			]
+		})
+
+		const app = new Vue({
+			router
+		}).$mount('#app')
+	</script>
+</body>
+</html>
