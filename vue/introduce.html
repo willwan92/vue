@@ -42,82 +42,90 @@
 	<div id="app-7">
 		<ol>
 			<!-- 为每个todo-item对象提供一个todo对象和key -->
-			<todo-item v-for="item in groceryList" v-bind:todo="item" v-bind:key="item.id"></todo-item>
+			<todo-item v-for="item in groceryList" v-bind:todo="item" v-bind:key="item.id">
+				
+			</todo-item>
 		</ol>
+		<todo-text></todo-text>
 	</div>
-</body>
-<script type="text/javascript">
-	// 插值
-	var app = new Vue({
-		el: "#app",
-		data: {
-			message: "Hello Vue!"
-		}
-	});
-	// 绑定属性
-	var app2 = new Vue({
-		el: "#app-2",
-		data: {
-			message: "页面加载于" + new Date().toLocaleString()
-		}
-	});
-	// 条件判断
-	var app3 = new Vue({
-		el: "#app-3",
-		data: {
-			seen: true
-		}
-	});
-	// 循环
-	var app4 = new Vue({
-		el: "#app-4",
-		data: {
-			todos: [
-				{ text: "学习 。。。" },
-				{ text: "学习 。。。" },
-				{ text: "学习 。。。" }
-			]
-		}
-	});
 
-	// 事件绑定
-	var app5 = new Vue({
-		el: '#app-5',
-		data: {
-			message: 'Hello Vue.js!'
-		},
-		methods: {
-			reverseMessage: function () {
-				this.message = this.message.split('').reverse().join('')
+	<script type="text/javascript">
+		// 插值
+		var app = new Vue({
+			el: "#app",
+			data: {
+				message: "Hello Vue!"
 			}
-		}
-	});
-	// 双向绑定
-	var app6 = new Vue({
-		el: '#app-6',
-		data: {
-			message: 'Hello Vue!'
-		}
-	});
+		});
+		// 绑定属性
+		var app2 = new Vue({
+			el: "#app-2",
+			data: {
+				message: "页面加载于" + new Date().toLocaleString()
+			}
+		});
+		// 条件判断
+		var app3 = new Vue({
+			el: "#app-3",
+			data: {
+				seen: true
+			}
+		});
+		// 循环
+		var app4 = new Vue({
+			el: "#app-4",
+			data: {
+				todos: [
+					{ text: "学习 。。。" },
+					{ text: "学习 。。。" },
+					{ text: "学习 。。。" }
+				]
+			}
+		});
 
-	// 组件化应用构建
-	
-	// 先注册组件
-	Vue.component('todo-item', {
-		// todo-item组件接受一个prop属性todo
-		props: ['todo'],
-		template: '<li>{{ todo.text }}</li>'
-	});
-	// 后实例化应用
-	var app = new Vue({
-		el: '#app-7',
-		data: {
-			groceryList: [
-				{id: 0, text: '蔬菜'},
-				{id: 1, text: '水果'},
-				{id: 2, text: '其他'}
-			]
-		}
-	});
-</script>
+		// 事件绑定
+		var app5 = new Vue({
+			el: '#app-5',
+			data: {
+				message: 'Hello Vue.js!'
+			},
+			methods: {
+				reverseMessage: function () {
+					this.message = this.message.split('').reverse().join('')
+				}
+			}
+		});
+		// 双向绑定
+		var app6 = new Vue({
+			el: '#app-6',
+			data: {
+				message: 'Hello Vue!'
+			}
+		});
+
+		// 组件化应用构建
+
+		// 先注册组件
+		Vue.component('todo-item', {
+			// todo-item组件接受一个prop属性todo
+			props: ['todo'],
+			template: '<li>{{ todo.text }}</li>'
+		});
+
+		Vue.component('todo-text', {
+			template: '<span>122</span>'
+		});
+		// 后实例化应用
+		var app = new Vue({
+			el: '#app-7',
+			data: {
+				groceryList: [
+					{id: 0, text: '蔬菜'},
+					{id: 1, text: '水果'},
+					{id: 2, text: '其他'}
+				]
+			}
+		});
+	</script>
+</body>
 </html>
