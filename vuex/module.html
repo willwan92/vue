@@ -14,6 +14,7 @@
 			否则后面html标签渲染不出来 。
 		-->
 		<Counter :count="countA"></Counter>
+		<p>total count: {{totalCountA}}</p>
 		<input type="button" @click="addA" value="+">
 		<input type="button" @click="asyncAddA" value="+(async)">
 		<br>
@@ -35,8 +36,9 @@
 			},
 
 			getters: {
-				doubleCount (state) {
-					return state.count * 2
+				totalCount (state, getters, rootState, rootGetters) {
+					// console.log(arguments)
+					return state.count + rootState.count
 				}
 			},
 
@@ -76,9 +78,21 @@
 		};
 
 		var store = new Vuex.Store({
+			state: {
+				count: 10
+			},
 			modules: {
 				a: moduleA,
-				b: moduleB
+				b: moduleB,
+				c: {
+					state: { name: 'c' },
+					mutations: {
+						changeName (state) {
+							// 这里的 `state` 对象是模块的局部状态
+							state.c = '';
+						}
+					}
+				}
 			}
 		})		
 
@@ -92,7 +106,7 @@
 			template: '<div>{{ count }}</div>'
 		}
 
-		const {mapState, mapMutations, mapActions} = Vuex;
+		const {mapState, mapGetters, mapMutations, mapActions} = Vuex;
 
 		var app = new Vue({
 			el: "#app",
@@ -109,6 +123,10 @@
 				// 同一模块统一指定路径
 				...mapState('b', {
 					countB: state => state.count
+				}),
+
+				...mapGetters('a', {
+					totalCountA: 'totalCount'
 				})
 			},
 			methods: {
@@ -126,6 +144,29 @@
 				...mapActions('b', {
 					asyncAddB: 'increment'
 				})
+			},
+
+			created() {
+
+				console.log(store.state.c)
+
+				// 动态注册模块
+				// store.registerModule('a', {
+				// 	state: {
+				// 		count: 100
+				// 	},
+				// 	mutations: {
+				// 		increment(state) {
+				// 			state.count += 2;
+				// 		}
+				// 	}
+				// }, { preserveState: true })
+
+				// console.log(store.state.a)
+
+				store.unregisterModule('c');
+
+				console.log(store.state.c)
 			}
 		})
 		

@@ -1,6 +1,6 @@
 # Module
 
-为了解决应用复杂时，store 对象就可能变得相当臃肿，Vuex 允许将 store 分割成模块（module）。每个模块拥有自己的 state、mutation、action、getter、以及嵌套子模块（从上至下进行同样方式的分割）。
+为了解决应用复杂时 store 对象就可能变得相当臃肿，Vuex 允许将 store 分割成模块（module）。每个模块拥有自己的 state、mutation、action、getter、以及嵌套子模块（从上至下进行同样方式的分割）。
 
 	const moduleA = {
 		state: { ... },
@@ -73,10 +73,11 @@
 	const store = new Vuex.Store({
 		modules: {
 			account: {
+				// 开启命名空间
 				namespaced: true,
 
 				// 模块内容（module assets）
-				state: { ... }, // 模块内的状态已经是嵌套的了，使用 `namespaced` 属性不会对其产生影响
+				state: { ... }, 
 				getters: {
 					isAdmin () { ... } // -> getters['account/isAdmin']
 				},
@@ -111,9 +112,9 @@
 		}
 	})
 
-**推荐所有模块开启命名空间（添加 `namespaced: true`），这样可以避免不同模块之间的命名冲突，但是应尽量避免模块嵌套。**
+**推荐所有模块开启命名空间，这样可以避免不同模块之间的命名冲突，但是应尽量避免模块嵌套。**
 
-## 带命名空间的辅助函数
+### 带命名空间的辅助函数
 
 当使用 mapState, mapGetters, mapActions 和 mapMutations 这些辅助函数来绑定带命名空间的模块时，需要指定相应模块的空间路径。
 
@@ -126,10 +127,10 @@
 			})
 		},
 		methods: {
-			...mapActions({
+			...mapActions([
 				'moduleA/foo', // -> 调用方法：this['moduleA/foo']()
 				'moduleA/bar' // -> 调用方法：this['moduleA/bar']()
-			})
+			])
 		}
 
 1. 将模块空间路径字符串作为第一个参数传递给辅助函数
@@ -168,4 +169,91 @@
 				])
 			}
 		}
+
+### 在带命名空间的模块内访问全局内容
+
+如果要使用全局 state 和 getter，可以在 **getters 和 actions** 中使用。rootState 和 rootGetters 会作为第三和第四参数传入 **getter** ，也会通过 context 对象的属性传入 action。
+
+如果要在全局命名空间内分发 action 或提交 mutation，将 `{ root: true }` 作为第三个参数传给 dispatch 或 commit 即可。
+
+	modules: {
+		foo: {
+			namespaced: true,
+
+			getters: {
+				// 在这个模块的 getter 中，`getters` 被局部化了
+				// 你可以使用 getter 的第四个参数来调用 `rootGetters`
+				someGetter (state, getters, rootState, rootGetters) {
+					getters.someOtherGetter // -> 'foo/someOtherGetter'
+					rootGetters.someOtherGetter // -> 'someOtherGetter'
+				},
+				someOtherGetter: state => { ... }
+			},
+
+			actions: {
+				// 在这个模块中， dispatch 和 commit 也被局部化了
+				// 他们可以接受 `root` 属性以访问根 dispatch 或 commit
+				someAction ({ dispatch, commit, getters, rootGetters }) {
+					getters.someGetter // -> 'foo/someGetter'
+					rootGetters.someGetter // -> 'someGetter'
+
+					dispatch('someOtherAction') // -> 'foo/someOtherAction'
+					dispatch('someOtherAction', null, { root: true }) // -> 'someOtherAction'
+
+					commit('someMutation') // -> 'foo/someMutation'
+					commit('someMutation', null, { root: true }) // -> 'someMutation'
+				},
+				someOtherAction (ctx, payload) { ... }
+			}
+		}
+	}
+
+### 在带命名空间的模块注册全局 action
+
+若需要在带命名空间的模块注册全局 action，你可添加 `root: true`，并将这个 action 的定义放在函数 handler 中。例如：
+
+	{
+		actions: {
+			someOtherAction ({dispatch}) {
+				dispatch('someAction')
+			}
+		},
+		modules: {
+			foo: {
+				namespaced: true,
+
+				actions: {
+					someAction: {
+						root: true,
+						handler (namespacedContext, payload) { ... } // -> 'someAction'
+					}
+				}
+			}
+		}
+	}
+
+## 模块动态注册
+
+在 store 创建之后，可以使用 store.registerModule 方法注册模块。动态卸载模块使用 store.unregisterModule(moduleName) 。注意，你不能使用此方法卸载静态模块（即创建 store 时声明的模块）。
+
+	// 注册模块 `myModule`
+	store.registerModule('myModule', {
+		// ...
+	})
+	// 注册嵌套模块 `nested/myModule`
+	store.registerModule(['nested', 'myModule'], {
+		// ...
+	})
+
+模块动态注册功能使得其他 Vue 插件可以通过在 store 中附加新模块的方式来使用 Vuex 管理状态。
+
+#### 保留 state
+
+<!-- 
+1. 加班费计算 	1.5倍工资   1.5倍工资 （和经济补偿1.5个月工资二选一）
+1. 年假计算 		4天				 	5天
+1. 离职结薪日期	11.21			  12.20
+1. 经济补偿计算 2个月工资		 1.5个月工资
+1. 社保缴至月份 12月份 			 1月份
+ -->
 
