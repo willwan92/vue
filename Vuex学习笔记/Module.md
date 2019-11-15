@@ -234,7 +234,9 @@
 
 ## 模块动态注册
 
-在 store 创建之后，可以使用 store.registerModule 方法注册模块。动态卸载模块使用 store.unregisterModule(moduleName) 。注意，你不能使用此方法卸载静态模块（即创建 store 时声明的模块）。
+在 store 创建之后，可以使用 store.registerModule 方法注册模块。动态卸载模块使用 store.unregisterModule(moduleName) 。
+
+**注意，** 你不能使用此方法卸载静态模块（即创建 store 时声明的模块）。不知道为什么实际也能卸载掉静态模块。
 
 	// 注册模块 `myModule`
 	store.registerModule('myModule', {
@@ -248,6 +250,45 @@
 模块动态注册功能使得其他 Vue 插件可以通过在 store 中附加新模块的方式来使用 Vuex 管理状态。
 
 #### 保留 state
+
+动态注册模块也可以注册 store 中已有的模块，这时旧模块将会被覆盖。如果想保留旧模块中的 state ，可以通过 preserveState 选项将其保留。例如：`store.registerModule('a', module, { preserveState: true })`。
+
+## 模块重用
+
+有时我们可能需要创建一个模块的多个实例，例如：
+
+- 创建多个 store，它们公用同一个模块
+- 在一个 store 中多次注册同一个模块
+
+如果我们使用一个纯对象来声明模块的状态，那么这个状态对象会通过引用被共享，导致状态对象被修改时 store 或模块间数据互相污染。
+
+实际上这和 Vue 组件内的 data 是同样的问题。因此**使用一个函数来声明模块状态**（仅 2.3.0+ 支持）：
+
+	const MyReusableModule = {
+		state () {
+			return {
+				foo: 'bar'
+			}
+		},
+		// mutation, action 和 getter 等等...
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- 
 1. 加班费计算 	1.5倍工资   1.5倍工资 （和经济补偿1.5个月工资二选一）

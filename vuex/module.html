@@ -148,25 +148,25 @@
 
 			created() {
 
-				console.log(store.state.c)
-
 				// 动态注册模块
-				// store.registerModule('a', {
-				// 	state: {
-				// 		count: 100
-				// 	},
-				// 	mutations: {
-				// 		increment(state) {
-				// 			state.count += 2;
-				// 		}
-				// 	}
-				// }, { preserveState: true })
+				// 也可以动态注册 store 中已有的模块，旧模块将会被覆盖，
+				// 第三个参数传为 { preserveState: true } 可以保留原模块中的 state 
+				store.registerModule('a', {
+					state: {
+						count: 100
+					},
+					mutations: {
+						increment(state) {
+							state.count += 2;
+						}
+					}
+				}, { preserveState: true })
 
-				// console.log(store.state.a)
-
+				// 动态卸载模块，官方文档说明只能卸载动态注册的模块
+				// ？？？ 不知道为什么也可以卸载静态模块（创建store时声明的模块）
 				store.unregisterModule('c');
+				// store.unregisterModule('b');
 
-				console.log(store.state.c)
 			}
 		})
 		
