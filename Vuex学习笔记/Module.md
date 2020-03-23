@@ -66,7 +66,7 @@
 
 ## 模块的命名空间
 
-默认情况下，模块内部的 action、mutation 和 getter 是注册在全局命名空间的。模块开启命名空间的后，它的所有 getter、action 及 mutation 都会自动根据模块注册的路径调整命名。
+默认情况下，**只有state注册在模块命名空间**，模块内部的 action、mutation 和 getter 是注册在全局命名空间的。模块开启命名空间的后，它的所有 getter、action 及 mutation 都会自动根据模块注册的路径调整命名。
 
 例如：
 
